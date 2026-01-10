@@ -110,6 +110,7 @@
       "fullNamePlaceholder": "John Doe",
       "username": "Username",
       "usernamePlaceholder": "johndoe",
+      "usernameEnglishOnly": "Username must be in English characters only",
       "usernameHint": "Only letters, numbers, and underscores",
       "email": "Email",
       "emailPlaceholder": "your@email.com",

@@ -164,19 +164,19 @@ export class AdminController {
             try {
               // Process image with sharp:
               // - Auto-rotate based on EXIF orientation (important for mobile photos!)
-              // - Resize to max 800x600 while maintaining aspect ratio
-              // - Optimize quality
+              // - Resize to max 1600x1200 while maintaining aspect ratio (high-DPI support)
+              // - Optimize quality for sharpness
               const sharpInstance = sharp(buffer)
                 .rotate() // Auto-rotate based on EXIF orientation - CRITICAL for mobile photos
-                .resize(800, 600, {
+                .resize(1600, 1200, {
                   fit: 'inside',
                   withoutEnlargement: true,
                 });
 
               if (outputExt === 'png') {
-                await sharpInstance.png({ quality: 85 }).toFile(filepath);
+                await sharpInstance.png({ quality: 90 }).toFile(filepath);
               } else {
-                await sharpInstance.jpeg({ quality: 85 }).toFile(filepath);
+                await sharpInstance.jpeg({ quality: 90 }).toFile(filepath);
               }
 
               imageUrl = `/uploads/bets/${filename}`;

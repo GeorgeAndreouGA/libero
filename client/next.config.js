@@ -15,7 +15,7 @@ const nextConfig = {
   images: {
     // Keep images unoptimized to ensure compatibility with Docker/nginx setup
     // where images are served from a different service (API server)
-    // Images are already optimized on upload via sharp (800x600, quality 80)
+    // Images are already optimized on upload via sharp (1600x1200, quality 90)
     unoptimized: true,
     remotePatterns: [
       {

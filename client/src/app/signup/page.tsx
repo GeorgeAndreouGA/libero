@@ -285,6 +285,9 @@ export default function SignupPage() {
                 <label className="block text-sm font-semibold text-gray-300 mb-2">
                   {t('username')}
                 </label>
+                <p className="text-xs text-red-400 font-medium mb-2">
+                  ⚠️ {t('usernameEnglishOnly')}
+                </p>
                 <div className="relative">
                   <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neon-cyan" />
                   <input

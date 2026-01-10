@@ -110,6 +110,7 @@
       "fullNamePlaceholder": "Γιάννης Παπαδόπουλος",
       "username": "Όνομα Χρήστη",
       "usernamePlaceholder": "giannisp",
+      "usernameEnglishOnly": "Το όνομα χρήστη πρέπει να είναι μόνο σε αγγλικούς χαρακτήρες",
       "usernameHint": "Μόνο γράμματα, αριθμοί και κάτω παύλες",
       "email": "Email",
       "emailPlaceholder": "email@example.com",
