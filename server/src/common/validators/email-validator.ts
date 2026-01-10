@@ -49,6 +49,19 @@ const LEGITIMATE_EMAIL_PROVIDERS = [
   'virgilio.it',
   'tiscali.it',
   
+  // Greek providers
+  'yahoo.gr',
+  'hotmail.gr',
+  'windowslive.gr',
+  'otenet.gr',
+  'forthnet.gr',
+  'cosmotemail.gr',
+  'vodafone.gr',
+  'hol.gr',
+  'in.gr',
+  'pathfinder.gr',
+  'mail.gr',
+  
   // Other legitimate providers
   'fastmail.com',
   'tutanota.com',
