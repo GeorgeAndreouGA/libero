@@ -293,7 +293,7 @@ export default function SignupPage() {
                   <input
                     type="text"
                     value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value.trim() })}
                     required
                     minLength={3}
                     maxLength={50}
