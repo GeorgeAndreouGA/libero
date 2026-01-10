@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/dashboard/page": "/dashboard",
+  "/bets/page": "/bets",
+  "/forgot-password/page": "/forgot-password",
+  "/info/page": "/info",
+  "/legal/cookies/page": "/legal/cookies",
+  "/legal/terms/page": "/legal/terms",
+  "/legal/privacy/page": "/legal/privacy",
+  "/login/page": "/login",
+  "/packs/page": "/packs",
+  "/page": "/",
+  "/reset-password/page": "/reset-password",
+  "/profile/page": "/profile",
+  "/signup/page": "/signup",
+  "/verify-email/page": "/verify-email",
+  "/statistics/page": "/statistics",
+  "/admin/bets/page": "/admin/bets",
+  "/admin/page": "/admin",
+  "/admin/users/page": "/admin/users",
+  "/admin/categories/page": "/admin/categories",
+  "/admin/packs/page": "/admin/packs"
+}

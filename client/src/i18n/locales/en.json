@@ -1,0 +1,593 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "back": "Back",
+    "view": "View",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "yes": "Yes",
+    "no": "No",
+    "success": "Success",
+    "error": "Error",
+    "noResults": "No results found",
+    "confirm": "Confirm",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed",
+    "language": "Language",
+    "english": "English",
+    "greek": "Greek",
+    "selectPlan": "Select Plan",
+    "selected": "Selected",
+    "mostPopular": "Most Popular",
+    "odds": "Odds",
+    "inProgress": "In Progress",
+    "win": "Win",
+    "lost": "Lost",
+    "cashOut": "Cash Out 95% Profit",
+    "recentlyAdded": "Recently added",
+    "daysRemaining": "days remaining",
+    "expiresIn": "Expires in",
+    "day": "day",
+    "days": "days",
+    "loadMore": "Load More"
+  },
+  "footer": {
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "cookiePolicy": "Cookie Policy",
+    "allRightsReserved": "All rights reserved."
+  },
+  "captcha": {
+    "securityCheck": "Security Check",
+    "verified": "Verified",
+    "clickToVerify": "Click to verify",
+    "incorrectAnswer": "Incorrect answer, please try again"
+  },
+  "subscription": {
+    "expiringWarning": "Your subscription expires soon",
+    "expiresSoon": "Your subscription will expire in less than a week.",
+    "renewNow": "Renew Now",
+    "expires": "Expires"
+  },
+  "nav": {
+    "home": "Home",
+    "packs": "Packs",
+    "bets": "Bets",
+    "statistics": "Statistics",
+    "info": "Info",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "joinNow": "Join Now",
+    "users": "Users",
+    "packsCategories": "Packs & Categories"
+  },
+  "home": {
+    "hero": {
+      "title1": "Welcome to",
+      "title2": "Libero Tips",
+      "subtitle": "Professional football Analysis focused on turning Sports Betting into an Investment.",
+      "cta": "Get Started Now"
+    },
+    "readyToWin": {
+      "title": "Ready to get started?",
+      "subtitle": "Become a VIP member and gain access to the best and most researched Bets.",
+      "cta": "Join Now"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "WELCOME BACK",
+      "subtitle": "Login to access your premium tips",
+      "emailOrUsername": "Email or Username",
+      "emailPlaceholder": "your@email.com or username",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "Forgot password?",
+      "submit": "Login",
+      "loggingIn": "Logging in...",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "error": "Login failed. Please check your credentials."
+    },
+    "signup": {
+      "title": "JOIN LIBERO",
+      "subtitle": "Create your account and start winning",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "username": "Username",
+      "usernamePlaceholder": "johndoe",
+      "usernameHint": "Only letters, numbers, and underscores",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "dateOfBirth": "Date of Birth",
+      "dateOfBirthHint": "You must be at least 18 years old to use this service",
+      "ageVerified": "Age verified (18+)",
+      "ageNotValid": "You must be at least 18 years old",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "language": "Preferred Language",
+      "languageHint": "All emails and communications will be sent in this language",
+      "languageWarning": "This cannot be changed after signup. Your language determines which Telegram VIP channel you will join when you subscribe.",
+      "submit": "Create Account",
+      "creating": "Creating...",
+      "hasAccount": "Already have an account?",
+      "login": "Login",
+      "passwordRequirements": {
+        "title": "Password Requirements",
+        "length": "At least 10 characters",
+        "uppercase": "One uppercase letter",
+        "lowercase": "One lowercase letter",
+        "number": "One number",
+        "special": "One special character"
+      },
+      "success": {
+        "title": "Account Created!",
+        "message": "Please check your email to verify your account within 10 minutes.",
+        "warning": "If you don't verify within 10 minutes, your account will be automatically removed.",
+        "keepTabOpen": "Keep This Tab Open!",
+        "keepTabOpenMessage": "Do not close this browser tab until you verify your email. Click the link in your email to complete registration.",
+        "didntReceive": "Didn't receive the email?",
+        "resendLink": "Resend Verification Email",
+        "resending": "Resending...",
+        "alreadyVerified": "Already verified? You can now log in.",
+        "goToLogin": "Go to Login"
+      },
+      "errors": {
+        "passwordMismatch": "Passwords do not match",
+        "passwordInvalid": "Password does not meet all requirements",
+        "usernameFormat": "Username can only contain letters, numbers, and underscores",
+        "usernameTooShort": "Username must be at least 3 characters"
+      }
+    },
+    "forgotPassword": {
+      "title": "FORGOT PASSWORD",
+      "subtitle": "Enter your email or username to receive a reset link",
+      "email": "Email or Username",
+      "emailPlaceholder": "your@email.com or username",
+      "submit": "Send Reset Link",
+      "sending": "Sending...",
+      "backToLogin": "Back to Login",
+      "success": "Password reset link sent to your email",
+      "emailSentTitle": "Email Sent Successfully",
+      "emailSentMessage": "If an account exists with this email/username, you will receive a password reset link shortly.",
+      "linkExpires": "The link will expire in 10 minutes.",
+      "didntReceive": "Didn't receive the email? Try again",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "securityNote": "Security Note:",
+      "securityNoteText": "For security reasons, we won't confirm whether an email or username exists in our system."
+    },
+    "resetPassword": {
+      "title": "RESET PASSWORD",
+      "subtitle": "Enter your new password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Reset Password",
+      "resetting": "Resetting...",
+      "success": "Password reset successfully",
+      "successTitle": "Password Reset Successful",
+      "successMessage": "Your password has been changed successfully. You can now login with your new password.",
+      "redirecting": "Redirecting to login page...",
+      "goToLogin": "Go to Login",
+      "noToken": "No reset token found. Please request a new password reset link from the",
+      "forgotPasswordPage": "forgot password page",
+      "passwordMustContain": "Password must contain:",
+      "atLeast10Chars": "At least 10 characters",
+      "oneUppercase": "One uppercase letter",
+      "oneLowercase": "One lowercase letter",
+      "oneNumber": "One number",
+      "oneSpecial": "One special character",
+      "passwordsMatch": "Passwords match",
+      "rememberPassword": "Remember your password?",
+      "backToLogin": "Back to Login",
+      "securityTip": "Security Tip:",
+      "securityTipText": "Password reset links expire after 10 minutes for your security."
+    },
+    "verifyEmail": {
+      "verifying": "Verifying Email...",
+      "pleaseWait": "Please wait while we verify your email address.",
+      "successTitle": "Email Verified!",
+      "accountActive": "Your account is now active. Click below to login.",
+      "goToLogin": "Go to Login",
+      "failedTitle": "Verification Failed",
+      "possibleReasons": "Possible Reasons:",
+      "reasonExpired": "The verification link has expired (10 minutes limit)",
+      "reasonUsed": "The link has already been used",
+      "reasonRemoved": "The account was removed due to expiration",
+      "reasonInvalid": "Invalid or corrupted verification token",
+      "signUpAgain": "Sign Up Again",
+      "orTryLogin": "Or try logging in",
+      "loading": "Loading..."
+    }
+  },
+  "dashboard": {
+    "welcome": "WELCOME BACK",
+    "subtitle": "Here's your performance overview",
+    "activeSubscriptions": "Active Subscriptions",
+    "yourPacks": "Your current packs",
+    "manageSubscriptions": "Manage Subscriptions",
+    "noSubscriptions": "No active subscriptions",
+    "browsePacks": "Browse Packs",
+    "stats": {
+      "betsReceived": "Bets Received",
+      "winRate": "Win Rate",
+      "totalROI": "Total ROI"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "subtitle": "Your latest bets and results",
+      "noActivity": "No recent activity"
+    }
+  },
+  "packs": {
+    "title": "BETTING PACKS",
+    "subtitle": "Sign up to access exclusive betting categories. Higher tiers include all lower tier categories!",
+    "subtitleAuth": "Upgrade to unlock more categories. Higher tiers include all lower tier categories!",
+    "hierarchicalAccess": "Hierarchical Access",
+    "upgradeOnly": "Upgrade Only",
+    "signUpRequired": "Sign Up Required",
+    "currentPack": "Current",
+    "free": "FREE",
+    "perMonth": "/month",
+    "upgradeFrom": "Upgrade from €{price} (save €{savings})",
+    "includedCategories": "Included Categories:",
+    "noCategories": "No categories yet",
+    "includesFrom": "+ All categories from:",
+    "includedWithAccount": "Included with your account",
+    "signUpToAccess": "Sign up to access",
+    "checkout": {
+      "title": "Complete Your Order",
+      "selectedPack": "Selected Pack:",
+      "price": "Price:",
+      "upgradePrice": "Upgrade Price:",
+      "originalPrice": "Original Price:",
+      "cancel": "Cancel",
+      "proceedToPayment": "Proceed to Payment"
+    },
+    "billing": {
+      "upgradeTitle": "UPGRADE BILLING:",
+      "thisMonth": "This month: Pay only €{price} (difference)",
+      "newSubscriptionPeriod": "New subscription period: 1 month from today",
+      "nextRenewal": "Next renewal: Pay €{price} (full price)",
+      "noCancellationsUpgrade": "⚠️ NO CANCELLATIONS - No downgrades allowed",
+      "confirmationEmail": "📧 You'll receive confirmation email with new subscription dates",
+      "monthlyBilling": "Monthly billing: €{price}/month",
+      "subscriptionPeriod": "Subscription period: 1 month from purchase date",
+      "noCancellationsNew": "⚠️ NO CANCELLATIONS OR REFUNDS - All sales are final",
+      "confirmationEmailNew": "📧 You'll receive confirmation email with subscription dates",
+      "noAutoRenewal": "🔴 No auto renewal"
+    },
+    "active": "ACTIVE",
+    "downgradeNotAllowed": "Downgrades are not allowed. You can only upgrade to higher tiers.",
+    "upgradeAvailable": "Upgrade available",
+    "noPacksAvailable": "No packs available yet"
+  },
+  "bets": {
+    "title": "YOUR BETS",
+    "subtitle": "Premium betting insights curated by our expert analysts",
+    "categories": "Categories",
+    "allCategories": "All",
+    "categoriesCount": "{count} categories",
+    "upgradeToAccess": "Upgrade to access",
+    "filterByResult": "Filter by Result:",
+    "results": {
+      "all": "ALL",
+      "inProgress": "In Progress",
+      "finished": "Finished",
+      "win": "Win",
+      "lost": "Lost",
+      "cashOut": "Cash Out 95% Profit"
+    },
+    "noBets": "No bets found",
+    "noBetsForCategory": "No bets in this category yet",
+    "yourAccess": "Your Access",
+    "accessTo": "You have access to",
+    "bettingCategories": "betting categories",
+    "moreCategories": "more categories available with upgrade",
+    "paymentSuccessTitle": "Payment Successful!",
+    "paymentSuccessMessage": "Your subscription is now active. Enjoy your premium content!",
+    "needSubscription": "You need an active subscription to view bets",
+    "noMatchingBets": "No bets match your current filters",
+    "viewPacks": "View Packs",
+    "showAllBets": "Show All Bets",
+    "clearFilters": "Clear Filters"
+  },
+  "profile": {
+    "title": "PROFILE SETTINGS",
+    "subtitle": "Manage your account settings",
+    "info": {
+      "title": "Profile Information",
+      "subtitle": "Your account details",
+      "username": "Username",
+      "email": "Email"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "subtitle": "Update your password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "submit": "Change Password",
+      "changing": "Changing...",
+      "success": "Password changed successfully"
+    },
+    "language": {
+      "title": "Language Preference",
+      "subtitle": "Your account language",
+      "preferredLanguage": "Preferred Language",
+      "description": "All emails and communications will be in this language",
+      "lockedDescription": "Language is set during account creation and cannot be changed.",
+      "hint": "Changing your language will refresh the page to apply the new language settings.",
+      "lockedHint": "Your language determines which Telegram VIP channel you will join when you subscribe. Contact support if you need to change it.",
+      "success": "Language preference updated successfully",
+      "error": "Failed to update language preference",
+      "adminHint": "Select your preferred language for the dashboard."
+    },
+    "subscription": {
+      "title": "My Subscription",
+      "subtitle": "View your active subscription",
+      "active": "Active",
+      "noSubscription": "No active paid subscription",
+      "viewPacks": "View Packs",
+      "noAutoRenew": "Subscriptions do not auto-renew. Contact support for assistance.",
+      "perMonth": "/month"
+    },
+    "paymentMethods": {
+      "title": "Payment Methods",
+      "subtitle": "Manage your saved payment methods",
+      "manageSubtitle": "View and manage your saved cards",
+      "manageDescription": "Manage your saved payment methods, view invoices, and update billing information through Stripe's secure portal.",
+      "manageButton": "Manage Payment Methods",
+      "opening": "Opening...",
+      "noMethods": "No saved payment methods",
+      "savedDuring": "Payment methods are saved during checkout",
+      "expires": "Expires",
+      "deleteConfirm": "Are you sure you want to delete this payment method?",
+      "deleted": "Payment method deleted successfully"
+    },
+    "twoFactor": {
+      "title": "Two-Factor Authentication",
+      "subtitle": "Add an extra layer of security to your account",
+      "emailVerification": "Email Verification",
+      "emailVerificationDesc": "Receive a code via email when you login",
+      "enabled": "Two-Factor Authentication is enabled. Your account is protected.",
+      "disabled": "Two-Factor Authentication is disabled. Enable it for better security.",
+      "enableConfirm": "Enable Two-Factor Authentication? You will receive a verification code via email each time you login.",
+      "disableConfirm": "Disable Two-Factor Authentication? Your account will be less secure.",
+      "enabledSuccess": "Two-Factor Authentication enabled successfully!",
+      "disabledSuccess": "Two-Factor Authentication disabled."
+    },
+    "dataPrivacy": {
+      "title": "Data & Privacy",
+      "subtitle": "Manage your personal data (GDPR Rights)",
+      "exportData": "Export My Data",
+      "exportDataDesc": "Download all your personal data (Article 20 - Right to Data Portability)",
+      "exportButton": "Export Data",
+      "exporting": "Exporting...",
+      "exportSuccess": "Your data has been exported successfully!",
+      "deleteAccount": "Delete My Account",
+      "deleteAccountDesc": "Permanently delete your account and data (Article 17 - Right to be Forgotten)",
+      "gdprInfo": "Under GDPR, you have the right to access, export, and delete your personal data. Transaction records may be retained for 7 years in anonymized form for tax compliance."
+    },
+    "deleteModal": {
+      "title": "Delete Account",
+      "subtitle": "This action cannot be undone",
+      "warning": "Warning: Deleting your account will:",
+      "warningList": {
+        "profile": "Permanently remove your profile data",
+        "subscriptions": "Cancel all active subscriptions",
+        "telegram": "Remove you from VIP Telegram group",
+        "access": "Remove access to all betting tips",
+        "transactions": "Anonymize your transaction history"
+      },
+      "noRefunds": "No refunds will be issued for remaining subscription time.",
+      "passwordLabel": "Enter your password to confirm",
+      "passwordPlaceholder": "Your password",
+      "reasonLabel": "Reason for leaving (optional)",
+      "reasonPlaceholder": "Help us improve...",
+      "confirmLabel": "I understand this action is permanent and cannot be undone",
+      "cancel": "Cancel",
+      "deleteButton": "Delete My Account",
+      "deleting": "Deleting..."
+    },
+    "paymentSuccess": "Payment successful! Your subscription is now active."
+  },
+  "admin": {
+    "dashboard": {
+      "title": "ADMIN DASHBOARD",
+      "subtitle": "Command center for managing your platform",
+      "stats": {
+        "activeUsers": "Active Users",
+        "monthlyRevenue": "Monthly Revenue",
+        "activeSubscriptions": "Active Subscriptions",
+        "betsPublished": "Bets Published"
+      },
+      "recentSubscriptions": {
+        "title": "Recent Subscriptions",
+        "subtitle": "Latest user transactions",
+        "noSubscriptions": "No recent subscriptions"
+      },
+      "revenueOverview": {
+        "title": "Revenue Overview",
+        "subtitle": "Last 30 days",
+        "chartComingSoon": "Chart visualization coming soon",
+        "integration": "Integration with charting library"
+      }
+    },
+    "users": {
+      "title": "USER MANAGEMENT",
+      "subtitle": "Manage all registered users and their transactions",
+      "searchPlaceholder": "Search by email, username, or name...",
+      "timeFilters": {
+        "all": "All Time",
+        "24h": "Last 24 Hours",
+        "month": "Last Month"
+      },
+      "usersFound": "{count} users found",
+      "noUsers": "No users found",
+      "activeSubs": "Active Subs",
+      "total": "Total",
+      "joined": "Joined",
+      "backToUsers": "← Back to Users",
+      "activeSubscriptions": "Active Subscriptions",
+      "totalSpent": "Total Spent",
+      "transactions": {
+        "title": "Transactions",
+        "count": "{count} transactions",
+        "noTransactions": "No transactions found",
+        "noDescription": "No description"
+      }
+    },
+    "packs": {
+      "title": "PACKS & CATEGORIES",
+      "subtitle": "Manage your betting packs and categories",
+      "tabs": {
+        "packs": "Packs",
+        "categories": "Categories"
+      },
+      "searchPacks": "Search packs...",
+      "searchCategories": "Search categories...",
+      "createPack": "Create Pack",
+      "editPack": "Edit Pack",
+      "createCategory": "Create Category",
+      "editCategory": "Edit Category",
+      "form": {
+        "name": "Name",
+        "description": "Description",
+        "price": "Monthly Price (€)",
+        "isFree": "Free Pack",
+        "selectCategories": "Select Categories",
+        "inheritedCategories": "Inherited (included in selected packs)",
+        "includesPacks": "Includes Packs (Hierarchy)",
+        "autoIncluded": "Auto-included via hierarchy"
+      },
+      "noPacks": "No packs found",
+      "noCategories": "No categories found",
+      "deleteConfirm": "Are you sure you want to delete this?"
+    },
+    "bets": {
+      "title": "BET MANAGEMENT",
+      "subtitle": "Create and manage betting tips",
+      "createBet": "Create Bet",
+      "editBet": "Edit Bet",
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "category": "Category",
+        "selectCategory": "Select a category",
+        "odds": "Odds",
+        "oddsPlaceholder": "e.g., 1.85",
+        "result": "Result",
+        "image": "Image",
+        "uploadImage": "Upload Image",
+        "changeImage": "Change Image",
+        "imageRequired": "Image is required for new bets",
+        "imageHint": "PNG or JPG, max 5MB"
+      },
+      "publish": "Publish",
+      "published": "Published",
+      "draft": "Draft",
+      "setResult": "Set Result",
+      "noBets": "No bets found",
+      "deleteConfirm": "Are you sure you want to delete this bet?"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "networkError": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "notFound": "The requested resource was not found.",
+    "serverError": "Server error. Please try again later.",
+    "pleaseCompleteCaptcha": "Please complete the security check",
+    "invalidOrMissingToken": "Invalid or missing reset token. Please request a new password reset link.",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordDoesNotMeetRequirements": "Password does not meet requirements",
+    "failedToResetPassword": "Failed to reset password. The link may be expired or invalid.",
+    "failedToSendResetLink": "Failed to send reset link. Please try again.",
+    "noVerificationToken": "No verification token provided. Please check your email link.",
+    "verificationFailed": "Verification failed. The link may be expired or invalid."
+  },
+  "statistics": {
+    "title": "STATISTICS",
+    "subtitle": "Track our betting performance across all categories",
+    "filterByPeriod": "Filter by Period",
+    "filterByMonth": "Filter by Month",
+    "currentMonth": "Current Month",
+    "allTime": "All Time",
+    "byYear": "By Year",
+    "byMonth": "By Month",
+    "fullYear": "Full Year",
+    "showing": "Showing",
+    "totalWins": "Total Wins",
+    "totalLosses": "Total Losses",
+    "totalCashOuts": "Cash Outs 95% Profit",
+    "winRate": "Win Rate",
+    "totalProfit": "Total Profit",
+    "standardBets": "Standard Bets by Category",
+    "categoryBreakdown": "Category Breakdown",
+    "wins": "Wins",
+    "losses": "Losses",
+    "cashOuts": "Cash Outs 95% Profit",
+    "profit": "Profit",
+    "noStatistics": "No statistics available for this period",
+    "historical": {
+      "title": "Historical Results",
+      "subtitle": "Legacy performance data before the new system",
+      "month": "Month",
+      "yearMonth": "Year & Month",
+      "result": "Result",
+      "monthlyProfitLoss": "Monthly Profit/Loss",
+      "runningTotal": "Running Total",
+      "profit": "Profit",
+      "loss": "Loss",
+      "noData": "No historical data available",
+      "filterByYear": "Filter by Year",
+      "allYears": "All Years",
+      "note": "The statistics are calculated based on the following: VIP Elite: €60, Double (VIP Gold): €50, SBT (VIP Gold): €20, UFC (VIP Gold): €20, VIP Silver: €12, Parlay: €25, Hard Bets: €10, and Funbet: €5. Free UFC and Live bets are NOT included in the statistics."
+    }
+  },
+  "info": {
+    "title": "INFO",
+    "subtitle": "Everything you need to know about our VIP betting service",
+    "sbt": {
+      "title": "What is SBT?",
+      "content": "SBT, meaning Sports Betting Trading, is a new category which represents the future of betting. Many of you know what Trading is in general, but it has never existed for Sports Betting.",
+      "content2": "We use tools that we built ourselves over the past year with a lot of money and effort. These tools send us signals for LIVE games where there is a very good opportunity to double our money. The selection passes our checks that give us the okay to send it to the VIP."
+    },
+    "double": {
+      "title": "What is a Double?",
+      "content": "A double consists of the best and safest selections that we can combine so that the final odds double our money.",
+      "content2": "We usually have 2 doubles per week, one from Monday to Thursday and one from Friday to Sunday."
+    },
+    "cashOut": {
+      "title": "What is Cash Out and when do we use it?",
+      "content": "Cash out is an option provided by the betting company where, depending on how well our bet slip is going, they offer us the corresponding amount of money without the game finishing.",
+      "content2": "When I see a game where the result has not taken big dimensions and can ruin our bet slip at any moment, while offering us 95% of our final profit, then I send a signal on Telegram and tell you to Cash Out."
+    },
+    "staking": {
+      "title": "Why should we always use same Staking Amount?",
+      "content": "We must always Same Staking amount based on the percentages we have assigned for each type of bet slip. If someone does not have the financial ability to play with those specific amounts, they can set them themselves new ones by using the same percentages we set for each bet and dividing them so they reach a level that suits them.",
+      "content2": "After many wins, you should not fall into the trap of increasing the amount you stake. Any increase in staking should be done gradually on a monthly basis."
+    },
+    "upgrade": {
+      "title": "How does upgrading and the categories work?",
+      "content": "If someone wants to upgrade from a lower VIP to a higher one, they do not need to pay the full amount, only the difference required to reach the total price of the VIP category they are interested in.",
+      "content2": "The categories funbet, hard bets, parlay, UFC and live belong to the free package and are available to everyone. From these, UFC and live are the only ones that do not count in the statistics.",
+      "content3": "VIP Silver includes games from all countries around the world with our own connections. VIP Gold includes everything in VIP Silver plus the doubles, the UFC VIP where picks are always studied for many hours, and SBT. In the final and best category, VIP Elite, in addition to everything included in the lower VIP packages, we offer games similar to VIP Silver but much stronger and the best on the market. That is why they are offered only in Elite VIP, because the number of people we allow inside is much smaller than in Silver."
+    }
+  }
+}

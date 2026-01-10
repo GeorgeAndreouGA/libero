@@ -1,0 +1,225 @@
+
+# ===========================
+# PRODUCTION DOCKER COMPOSE
+# ===========================
+# Services: MySQL, Migrations, App, Client, Nginx
+# All services run in the same Docker network
+
+networks:
+  libero-prod:
+    name: libero-network-prod
+    driver: bridge
+
+# ===========================
+# Volumes
+# ===========================
+volumes:
+  mysql-data-prod:
+    driver: local
+    name: libero-mysql-data-prod
+  uploads-data-prod:
+    driver: local
+    name: libero-uploads-data-prod
+  backups-data-prod:
+    driver: local
+    name: libero-backups-data-prod
+  
+
+services:
+  # ===========================
+  # MySQL Database
+  # ===========================
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:3307:3306"
+    networks:
+      - libero-prod
+    volumes:
+      - mysql-data-prod:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootpassword2024}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    
+
+  # ===========================
+  # NestJS Application (Backend API)
+  # ===========================
+  app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: production
+    container_name: libero-app-prod
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    ports:
+      - "127.0.0.1:3005:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-false}
+      TZ: ${TZ}  # Cyprus timezone (EEST)
+      
+      # Database (connecting to mysql service)
+      DATABASE_URL: mysql://${DB_USER}:${DB_PASSWORD}@mysql:3306/${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      
+      # JWT
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION}
+      
+      # Encryption
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      
+      # Logging
+      LOG_LEVEL: ${LOG_LEVEL}
+      LOG_PRETTY: ${LOG_PRETTY}
+      
+      # CORS
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      
+      # Cookie Secret (for secure session handling)
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      
+      # Email Configuration
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SECURE: ${MAIL_SECURE}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_FROM: ${MAIL_FROM}
+      APP_NAME: ${APP_NAME}
+      FRONTEND_URL: ${FRONTEND_URL}
+      
+      # Stripe
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      
+      # Branding
+      LOGO_URL: ${LOGO_URL}
+      FAVICON_URL: ${FAVICON_URL}
+      
+      # Social Links
+      INSTAGRAM_LINK: ${INSTAGRAM_LINK}
+      TIKTOK_LINK: ${TIKTOK_LINK}
+      TELEGRAM_LINK_PUBLIC: ${TELEGRAM_LINK_PUBLIC}
+      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET}
+      TELEGRAM_WEBHOOK_URL: ${TELEGRAM_WEBHOOK_URL}
+      
+      # Telegram Channels (4 channels: VIP + Free for EN and EL)
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
+      TELEGRAM_VIP_CHAT_ID: ${TELEGRAM_VIP_CHAT_ID}
+      TELEGRAM_VIP_CHAT_ID_EL: ${TELEGRAM_VIP_CHAT_ID_EL}
+      TELEGRAM_PUBLIC_CHAT_ID: ${TELEGRAM_PUBLIC_CHAT_ID}
+      TELEGRAM_PUBLIC_CHAT_ID_EL: ${TELEGRAM_PUBLIC_CHAT_ID_EL}
+      TELEGRAM_LINK: ${TELEGRAM_LINK}
+      TELEGRAM_LINK_EL: ${TELEGRAM_LINK_EL}
+      
+      # VIP Community Chat Groups (for users to chat - same kick rules as VIP)
+      TELEGRAM_VIP_COMMUNITY_CHAT_ID: ${TELEGRAM_VIP_COMMUNITY_CHAT_ID}
+      TELEGRAM_VIP_COMMUNITY_CHAT_ID_EL: ${TELEGRAM_VIP_COMMUNITY_CHAT_ID_EL}
+      TELEGRAM_VIP_COMMUNITY_LINK: ${TELEGRAM_VIP_COMMUNITY_LINK}
+      TELEGRAM_VIP_COMMUNITY_LINK_EL: ${TELEGRAM_VIP_COMMUNITY_LINK_EL}
+      
+      # Contact
+      CONTACT_EMAIL: ${CONTACT_EMAIL}
+      
+    networks:
+      - libero-prod
+    volumes:
+      - uploads-data-prod:/app/uploads
+      - backups-data-prod:/app/backups
+     
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  
+
+  # ===========================
+  # Next.js Client (Frontend UI)
+  # ===========================
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+        # These NEXT_PUBLIC_ variables must be passed at build time
+        NEXT_PUBLIC_LOGO_URL: ${LOGO_URL:-/branding/logo.png}
+        NEXT_PUBLIC_FAVICON_URL: ${FAVICON_URL:-/branding/favicon.ico}
+        NEXT_PUBLIC_SITE_NAME: ${APP_NAME:-Libero Tips}
+        NEXT_PUBLIC_INSTAGRAM_LINK: ${INSTAGRAM_LINK}
+        NEXT_PUBLIC_INSTAGRAM_LINK_EL: ${INSTAGRAM_LINK_EL}
+        NEXT_PUBLIC_TIKTOK_LINK: ${TIKTOK_LINK}
+        NEXT_PUBLIC_TELEGRAM_LINK_PUBLIC: ${TELEGRAM_LINK_PUBLIC}
+        NEXT_PUBLIC_TELEGRAM_LINK_PUBLIC_EL: ${TELEGRAM_LINK_PUBLIC_EL}
+        NEXT_PUBLIC_CONTACT_EMAIL: ${CONTACT_EMAIL}
+    container_name: libero-client-prod
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      TZ: ${TZ}
+      
+    ports:
+      - "127.0.0.1:3006:3001"
+    networks:
+      - libero-prod
+    depends_on:
+      - app
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:3001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+   
+# ===========================
+  # Nginx Reverse Proxy (Internal - proxied by host nginx)
+  # ===========================
+  # Port 80 (8082): Public routes - internet accessible via host nginx :443
+  # Port 81 (8083): Admin routes - VPN/internal only via host nginx :857
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: libero-nginx-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8082:80"    # Public (host nginx :443 → here)
+      - "127.0.0.1:8083:81"    # Admin (host nginx :857 → here)
+    networks:
+      - libero-prod
+    depends_on:
+      - app
+      - client
