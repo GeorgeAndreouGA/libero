@@ -1,5 +1,5 @@
 # Libero Tips
-THIS SITE HAS BEEN GIVEN TO AN AGENCY. DON'T CLONE.THIS IS THE FIRST PRODUCTION VERSION AND NOT THE LATEST.USE WITH CAUTION!!!!
+
 
 
 A production-ready betting tips platform built with **NestJS + Fastify** (backend) and **Next.js** (frontend). The platform features multi-tier subscription packs, Stripe payment integration, Telegram bot integration for VIP communities, automated database backups, and bilingual support (English/Greek).
