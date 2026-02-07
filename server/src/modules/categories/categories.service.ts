@@ -12,6 +12,7 @@ export interface Category {
   displayOrder: number;
   isActive: boolean;
   includeInStatistics: boolean;
+  telegramNotifications: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +26,7 @@ export interface CreateCategoryDto {
   displayOrder?: number;
   isActive?: boolean;
   includeInStatistics?: boolean;
+  telegramNotifications?: boolean;
 }
 
 export interface UpdateCategoryDto {
@@ -32,10 +34,11 @@ export interface UpdateCategoryDto {
   nameEl?: string;
   description?: string;
   descriptionEl?: string;
+  standardBet?: number;
   displayOrder?: number;
   isActive?: boolean;
   includeInStatistics?: boolean;
-  // Note: standardBet is intentionally NOT included - it's immutable once set
+  telegramNotifications?: boolean;
 }
 
 @Injectable()
@@ -57,8 +60,9 @@ export class CategoriesService {
       descriptionEl: cat.description_el,
       standardBet: parseFloat(cat.standard_bet),
       displayOrder: cat.display_order,
-      isActive: cat.is_active,
-      includeInStatistics: cat.include_in_statistics,
+      isActive: Boolean(cat.is_active),
+      includeInStatistics: Boolean(cat.include_in_statistics),
+      telegramNotifications: Boolean(cat.telegram_notifications),
       createdAt: cat.created_at,
       updatedAt: cat.updated_at,
     }));
@@ -87,8 +91,9 @@ export class CategoriesService {
       descriptionEl: cat.description_el,
       standardBet: parseFloat(cat.standard_bet),
       displayOrder: cat.display_order,
-      isActive: cat.is_active,
-      includeInStatistics: cat.include_in_statistics,
+      isActive: Boolean(cat.is_active),
+      includeInStatistics: Boolean(cat.include_in_statistics),
+      telegramNotifications: Boolean(cat.telegram_notifications),
       createdAt: cat.created_at,
       updatedAt: cat.updated_at,
     }));
@@ -122,8 +127,9 @@ export class CategoriesService {
       descriptionEl: category.description_el,
       standardBet: parseFloat(category.standard_bet),
       displayOrder: category.display_order,
-      isActive: category.is_active,
-      includeInStatistics: category.include_in_statistics,
+      isActive: Boolean(category.is_active),
+      includeInStatistics: Boolean(category.include_in_statistics),
+      telegramNotifications: Boolean(category.telegram_notifications),
       createdAt: category.created_at,
       updatedAt: category.updated_at,
     };
@@ -132,7 +138,7 @@ export class CategoriesService {
   async createCategory(data: CreateCategoryDto): Promise<Category> {
     // Validate standardBet
     if (data.standardBet === undefined || data.standardBet === null) {
-      throw new BadRequestException('Standard bet is required and cannot be changed once set');
+      throw new BadRequestException('Standard bet is required');
     }
     if (data.standardBet < 0) {
       throw new BadRequestException('Standard bet must be a positive number');
@@ -156,8 +162,8 @@ export class CategoriesService {
 
     const id = uuidv4();
     await this.db.query(
-      `INSERT INTO categories (id, name, name_el, description, description_el, standard_bet, display_order, is_active, include_in_statistics)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO categories (id, name, name_el, description, description_el, standard_bet, display_order, is_active, include_in_statistics, telegram_notifications)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         data.name,
@@ -168,6 +174,7 @@ export class CategoriesService {
         nextDisplayOrder,
         true, // Always active
         data.includeInStatistics !== false, // Default to true
+        data.telegramNotifications !== false, // Default to true
       ]
     );
 
@@ -220,7 +227,17 @@ export class CategoriesService {
       updates.push('include_in_statistics = ?');
       values.push(data.includeInStatistics);
     }
-    // Note: standardBet is intentionally NOT updatable - it's immutable once set
+    if (data.standardBet !== undefined) {
+      if (data.standardBet < 0) {
+        throw new BadRequestException('Standard bet must be a positive number');
+      }
+      updates.push('standard_bet = ?');
+      values.push(data.standardBet);
+    }
+    if (data.telegramNotifications !== undefined) {
+      updates.push('telegram_notifications = ?');
+      values.push(data.telegramNotifications);
+    }
 
     if (updates.length > 0) {
       values.push(id);
@@ -281,8 +298,9 @@ export class CategoriesService {
       descriptionEl: cat.description_el,
       standardBet: parseFloat(cat.standard_bet),
       displayOrder: cat.display_order,
-      isActive: cat.is_active,
-      includeInStatistics: cat.include_in_statistics,
+      isActive: Boolean(cat.is_active),
+      includeInStatistics: Boolean(cat.include_in_statistics),
+      telegramNotifications: Boolean(cat.telegram_notifications),
       createdAt: cat.created_at,
       updatedAt: cat.updated_at,
     }));
@@ -318,8 +336,9 @@ export class CategoriesService {
       descriptionEl: cat.description_el,
       standardBet: parseFloat(cat.standard_bet),
       displayOrder: cat.display_order,
-      isActive: cat.is_active,
-      includeInStatistics: cat.include_in_statistics,
+      isActive: Boolean(cat.is_active),
+      includeInStatistics: Boolean(cat.include_in_statistics),
+      telegramNotifications: Boolean(cat.telegram_notifications),
       createdAt: cat.created_at,
       updatedAt: cat.updated_at,
     }));

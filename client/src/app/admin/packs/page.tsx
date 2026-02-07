@@ -52,6 +52,7 @@ export default function AdminPacksAndCategoriesPage() {
     description: '',
     descriptionEl: '',
     standardBet: '',
+    telegramNotifications: true,
   });
 
   // Translations
@@ -265,7 +266,8 @@ export default function AdminPacksAndCategoriesPage() {
         nameEl: categoryFormData.nameEl,
         description: categoryFormData.description,
         descriptionEl: categoryFormData.descriptionEl,
-        ...(editingCategoryId ? {} : { standardBet: parseFloat(categoryFormData.standardBet) || 0 }),
+        standardBet: parseFloat(categoryFormData.standardBet) || 0,
+        telegramNotifications: categoryFormData.telegramNotifications,
       };
       
       if (editingCategoryId) {
@@ -289,6 +291,7 @@ export default function AdminPacksAndCategoriesPage() {
       description: category.description || '',
       descriptionEl: category.descriptionEl || '',
       standardBet: category.standardBet?.toString() || '',
+      telegramNotifications: category.telegramNotifications !== false,
     });
     setShowCategoryModal(true);
   };
@@ -307,7 +310,7 @@ export default function AdminPacksAndCategoriesPage() {
   const handleCancelCategory = () => {
     setShowCategoryModal(false);
     setEditingCategoryId(null);
-    setCategoryFormData({ name: '', nameEl: '', description: '', descriptionEl: '', standardBet: '' });
+    setCategoryFormData({ name: '', nameEl: '', description: '', descriptionEl: '', standardBet: '', telegramNotifications: true });
   };
 
   if (loading) {
@@ -815,7 +818,7 @@ export default function AdminPacksAndCategoriesPage() {
 
                     <div>
                       <label className="block text-sm font-bold text-gray-300 mb-2">
-                        Standard Bet (€) * {editingCategoryId && <span className="text-yellow-400 text-xs">(Cannot be changed after creation)</span>}
+                        Standard Bet (€) *
                       </label>
                       <input
                         type="number"
@@ -823,14 +826,23 @@ export default function AdminPacksAndCategoriesPage() {
                         min="0"
                         value={categoryFormData.standardBet}
                         onChange={(e) => setCategoryFormData({ ...categoryFormData, standardBet: e.target.value })}
-                        required={!editingCategoryId}
-                        disabled={!!editingCategoryId}
-                        className={`w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-neon-cyan focus:outline-none ${editingCategoryId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        required
+                        className="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-neon-cyan focus:outline-none"
                         placeholder="e.g., 10.00"
                       />
-                      {!editingCategoryId && (
-                        <p className="text-xs text-gray-500 mt-1">This value cannot be changed once set.</p>
-                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        id="telegramNotificationsPack"
+                        checked={categoryFormData.telegramNotifications}
+                        onChange={(e) => setCategoryFormData({ ...categoryFormData, telegramNotifications: e.target.checked })}
+                        className="w-5 h-5 rounded border-gray-700 bg-dark-200 text-neon-cyan focus:ring-neon-cyan"
+                      />
+                      <label htmlFor="telegramNotificationsPack" className="text-sm font-bold text-gray-300">
+                        Send Telegram Bot Notifications
+                      </label>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-700">

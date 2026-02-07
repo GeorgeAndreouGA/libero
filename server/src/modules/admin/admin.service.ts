@@ -129,9 +129,28 @@ export class AdminService {
     };
   }
 
-  async getBets(page: number = 1, limit: number = 50) {
+  async getBets(page: number = 1, limit: number = 50, categoryId?: string, result?: string) {
     const offset = (page - 1) * limit;
     const safeLimit = Math.min(Math.max(limit, 1), 200); // Clamp between 1 and 200
+
+    // Build dynamic WHERE clause for filters
+    let whereClause = '';
+    const params: any[] = [];
+
+    if (categoryId) {
+      whereClause += ' WHERE b.category_id = ?';
+      params.push(categoryId);
+    }
+
+    if (result && result !== 'ALL') {
+      whereClause += whereClause ? ' AND' : ' WHERE';
+      if (result === 'FINISHED') {
+        whereClause += ' b.result IN ("WIN", "LOST", "CASH_OUT")';
+      } else if (['WIN', 'LOST', 'IN_PROGRESS', 'CASH_OUT'].includes(result)) {
+        whereClause += ' b.result = ?';
+        params.push(result);
+      }
+    }
 
     // Note: LIMIT and OFFSET are interpolated directly as integers (safe since they're validated numbers)
     const bets = await this.db.query(
@@ -142,13 +161,16 @@ export class AdminService {
               b.published_at as publishedAt, b.created_at as createdAt
        FROM bets b
        LEFT JOIN categories c ON b.category_id = c.id
+       ${whereClause}
        ORDER BY b.created_at DESC
-       LIMIT ${Number(safeLimit)} OFFSET ${Number(offset)}`
+       LIMIT ${Number(safeLimit)} OFFSET ${Number(offset)}`,
+      params
     );
 
-    // Get total count for pagination
+    // Get total count for pagination (with same filters)
     const countResult = await this.db.queryOne(
-      'SELECT COUNT(*) as total FROM bets'
+      `SELECT COUNT(*) as total FROM bets b${whereClause}`,
+      params
     );
     const total = countResult?.total || 0;
 
@@ -225,12 +247,13 @@ export class AdminService {
   }
 
   /**
-   * Send bet notification to appropriate Telegram channels based on category access
+   * Send bet notification to appropriate Telegram channels based on category pack membership
    * 
    * Rules:
-   * - VIP pack bets → VIP channels only (EN + EL)
-   * - FREE pack + "live" category → ALL 4 channels (VIP + Free)
-   * - FREE pack + non-live category → No bot notification (manual posting)
+   * - Free pack categories → Public/Free channels (both EN + EL)
+   * - VIP pack categories → VIP channels (both EN + EL)
+   * - Categories in both free and VIP packs → Both channels
+   * - Future categories route automatically based on which pack(s) they're assigned to
    */
   private async sendBetTelegramNotification(categoryId: string, bet: {
     odds?: string;
@@ -239,12 +262,18 @@ export class AdminService {
   }) {
     // Get category details
     const category = await this.db.queryOne(
-      'SELECT id, name, standard_bet as standardBet FROM categories WHERE id = ?',
+      'SELECT id, name, name_el as nameEl, standard_bet as standardBet, telegram_notifications as telegramNotifications FROM categories WHERE id = ?',
       [categoryId]
     );
 
     if (!category) {
       this.logger.warn(`Category ${categoryId} not found for Telegram notification`);
+      return;
+    }
+
+    // Check if Telegram notifications are enabled for this category
+    if (!category.telegramNotifications) {
+      this.logger.log(`Telegram notifications disabled for category "${category.name}", skipping`);
       return;
     }
 
@@ -259,46 +288,32 @@ export class AdminService {
       [categoryId]
     );
 
-    // Check if any pack with direct access is free (for determining VIP vs Public channels)
+    // Check if any pack with direct access is free or VIP
     const allPacks = packsWithDirectAccess.map((pack: any) => ({
       id: pack.id,
       name: pack.name,
       isFree: !!pack.isFree,
       displayOrder: pack.displayOrder,
     }));
-    
-    const isFreeCategory = allPacks.some(p => p.isFree);
-    const isLiveCategory = category.name.toLowerCase() === 'live';
 
-    // Determine what to send based on the rules:
-    // - VIP pack bets → VIP channels only
-    // - FREE pack + "live" category → ALL 4 channels
-    // - FREE pack + non-live category → No bot notification
-    
-    let sendToVip = false;
-    let sendToPublic = false;
-
-    if (isFreeCategory) {
-      if (isLiveCategory) {
-        // FREE + live → send to all 4 channels
-        sendToVip = true;
-        sendToPublic = true;
-      } else {
-        // FREE + non-live → no bot notification (manual posting)
-        sendToVip = false;
-        sendToPublic = false;
-        this.logger.log(`Skipping Telegram notification for FREE non-live category "${category.name}" (manual posting)`);
-        return;
-      }
-    } else {
-      // VIP category → send to VIP channels only
-      sendToVip = true;
-      sendToPublic = false;
+    if (allPacks.length === 0) {
+      this.logger.warn(`Category "${category.name}" has no active packs assigned, skipping Telegram notification`);
+      return;
     }
+
+    const isFreeCategory = allPacks.some(p => p.isFree);
+    const isVipCategory = allPacks.some(p => !p.isFree);
+
+    // Route based on pack membership:
+    // - Free pack categories → Public channels
+    // - VIP pack categories → VIP channels
+    // - Both → Both channels
+    const sendToVip = isVipCategory;
+    const sendToPublic = isFreeCategory;
 
     const result = await this.telegramService.sendBetNotification(
       bet,
-      { name: category.name, standardBet: category.standardBet },
+      { name: category.name, nameEl: category.nameEl, standardBet: category.standardBet },
       allPacks,
       sendToVip,
       sendToPublic,

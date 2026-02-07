@@ -727,14 +727,16 @@ export class TelegramService implements OnModuleInit {
   }
 
   /**
-   * Send a bet notification to ALL appropriate Telegram channels (both languages)
-   * - VIP gets ALL bets (both EN and EL channels)
-   * - Public only gets FREE category bets (both EN and EL channels)
+   * Send a bet notification to appropriate Telegram channels (both languages)
+   * Routing is determined by the category's pack membership:
+   * - VIP pack categories → VIP channels (both EN and EL)
+   * - Free pack categories → Public channels (both EN and EL)
+   * - Categories in both → Both channels
    * @param bet - The bet object with all details
    * @param category - The category object
    * @param packs - Array of packs that have access to this category (with displayOrder for diamond hierarchy)
-   * @param sendToVip - Whether to send to VIP groups (always both languages)
-   * @param sendToPublic - Whether to send to Public channels (only for free categories, both languages)
+   * @param sendToVip - Whether to send to VIP groups (both languages)
+   * @param sendToPublic - Whether to send to Public channels (both languages)
    */
   async sendBetNotification(
     bet: {
@@ -744,6 +746,7 @@ export class TelegramService implements OnModuleInit {
     },
     category: {
       name: string;
+      nameEl?: string;
       standardBet?: number;
     },
     packs: Array<{ id: string; name: string; isFree: boolean; displayOrder: number }>,
@@ -753,10 +756,6 @@ export class TelegramService implements OnModuleInit {
     const result = { vipEn: false, vipEl: false, publicEn: false, publicEl: false };
     const siteUrl = this.configService.get<string>('FRONTEND_URL') || '';
 
-    // Build messages for both languages
-    const messageEn = this.formatBetMessage(bet, category, packs, 'en');
-    const messageEl = this.formatBetMessage(bet, category, packs, 'el');
-
     // Only add inline keyboard if we have a valid public URL (not localhost)
     const isValidUrl = siteUrl && !siteUrl.includes('localhost') && siteUrl.startsWith('https://');
     const keyboardEn = isValidUrl ? [[{ text: '🔗 Click here', url: siteUrl }]] : undefined;
@@ -764,9 +763,11 @@ export class TelegramService implements OnModuleInit {
 
     // Send to both VIP channels (EN and EL)
     if (sendToVip) {
+      const vipMessageEn = this.formatVipMessage(category, packs, 'en');
+      const vipMessageEl = this.formatVipMessage(category, packs, 'el');
       const [vipEn, vipEl] = await Promise.all([
-        this.sendMessageToVip(messageEn, 'en', 'HTML', keyboardEn),
-        this.sendMessageToVip(messageEl, 'el', 'HTML', keyboardEl),
+        this.sendMessageToVip(vipMessageEn, 'en', 'HTML', keyboardEn),
+        this.sendMessageToVip(vipMessageEl, 'el', 'HTML', keyboardEl),
       ]);
       result.vipEn = vipEn;
       result.vipEl = vipEl;
@@ -774,9 +775,11 @@ export class TelegramService implements OnModuleInit {
 
     // Send to both Public channels (EN and EL) - only for free categories
     if (sendToPublic) {
+      const publicMessageEn = this.formatPublicMessage(category, 'en');
+      const publicMessageEl = this.formatPublicMessage(category, 'el');
       const [publicEn, publicEl] = await Promise.all([
-        this.sendMessageToPublic(messageEn, 'en', 'HTML', keyboardEn),
-        this.sendMessageToPublic(messageEl, 'el', 'HTML', keyboardEl),
+        this.sendMessageToPublic(publicMessageEn, 'en', 'HTML', keyboardEn),
+        this.sendMessageToPublic(publicMessageEl, 'el', 'HTML', keyboardEl),
       ]);
       result.publicEn = publicEn;
       result.publicEl = publicEl;
@@ -799,16 +802,34 @@ export class TelegramService implements OnModuleInit {
   }
 
   /**
-   * Format a bet into a Telegram message with pack info and diamonds
+   * Format a Telegram message for Public (free) channels
+   * Format: 📢 Μόλις ανέβηκε ένα <b>Live</b> Bet για <b>ΟΛΟΥΣ</b>!
    */
-  private formatBetMessage(
-    bet: {
-      odds?: string;
-      match?: any;
-      analysis?: string;
-    },
+  private formatPublicMessage(
     category: {
       name: string;
+      nameEl?: string;
+      standardBet?: number;
+    },
+    language: 'en' | 'el' = 'en',
+  ): string {
+    const categoryDisplayName = language === 'el' && category.nameEl ? category.nameEl : category.name;
+
+    if (language === 'el') {
+      return `📢 Μόλις ανέβηκε ένα <b>${categoryDisplayName} Bet</b> για <b>ΟΛΟΥΣ</b>!`;
+    } else {
+      return `📢 A new <b>${categoryDisplayName} Bet</b> has been uploaded for <b>EVERYONE</b>!`;
+    }
+  }
+
+  /**
+   * Format a Telegram message for VIP channels (with diamonds)
+   * Format: 💎💎\n\nΈνα νέο <b>UFC VIP</b> ανέβηκε στο <b>VIP Gold</b>!
+   */
+  private formatVipMessage(
+    category: {
+      name: string;
+      nameEl?: string;
       standardBet?: number;
     },
     packs: Array<{ id: string; name: string; isFree: boolean; displayOrder: number }>,
@@ -818,8 +839,7 @@ export class TelegramService implements OnModuleInit {
 
     // Get non-free packs sorted by display_order for diamond display
     const vipPacks = packs.filter(p => !p.isFree).sort((a, b) => a.displayOrder - b.displayOrder);
-    const freePacks = packs.filter(p => p.isFree);
-    
+
     // Add diamonds for each VIP pack (one line per pack, lowest tier first)
     vipPacks.forEach(pack => {
       const diamonds = this.getDiamondsForPack(pack.displayOrder, pack.isFree);
@@ -833,26 +853,13 @@ export class TelegramService implements OnModuleInit {
       lines.push('');
     }
 
-    // Build pack names - VIP packs in bold, include category name for free packs
-    const packNamesFormatted: string[] = [];
-    
-    // Add VIP packs (bold)
-    vipPacks.forEach(pack => {
-      packNamesFormatted.push(`<b>${pack.name}</b>`);
-    });
-    
-    // Add Free packs with category name (e.g., "Free Pack - Live")
-    freePacks.forEach(pack => {
-      packNamesFormatted.push(`${pack.name} - ${category.name}`);
-    });
+    const categoryDisplayName = language === 'el' && category.nameEl ? category.nameEl : category.name;
+    const packNamesString = vipPacks.map(p => `<b>${p.name}</b>`).join(', ');
 
-    const packNamesString = packNamesFormatted.join(', ');
-
-    // Bilingual message
     if (language === 'el') {
-      lines.push(`Ένα νέο στοίχημα ανέβηκε στο ${packNamesString}!`);
+      lines.push(`Ένα νέο <b>${categoryDisplayName}</b> ανέβηκε στο ${packNamesString}!`);
     } else {
-      lines.push(`A new bet has been uploaded to ${packNamesString}!`);
+      lines.push(`A new <b>${categoryDisplayName}</b> bet has been uploaded to ${packNamesString}!`);
     }
 
     return lines.join('\n');

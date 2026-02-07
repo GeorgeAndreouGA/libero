@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `date_of_birth` DATE NOT NULL COMMENT 'User date of birth for age verification',
   `age_verified` BOOLEAN NOT NULL DEFAULT FALSE,
   `cookie_consent` BOOLEAN NOT NULL DEFAULT FALSE,
+  `terms_accepted` BOOLEAN NOT NULL DEFAULT FALSE,
+  `privacy_accepted` BOOLEAN NOT NULL DEFAULT FALSE,
   `country_code` VARCHAR(2),
   `preferred_language` ENUM('en', 'el') NOT NULL DEFAULT 'en' COMMENT 'User preferred language',
   `stripe_customer_id` VARCHAR(255) UNIQUE,
@@ -57,10 +59,11 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `name_el` VARCHAR(255) COMMENT 'Greek translation of category name',
   `description` TEXT,
   `description_el` TEXT COMMENT 'Greek translation of description',
-  `standard_bet` DECIMAL(10,2) NOT NULL COMMENT 'Standard bet amount in EUR - immutable once set',
+  `standard_bet` DECIMAL(10,2) NOT NULL COMMENT 'Standard bet amount in EUR',
   `display_order` INT NOT NULL DEFAULT 0,
   `is_active` BOOLEAN NOT NULL DEFAULT TRUE,
   `include_in_statistics` BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Whether to include in public statistics',
+  `telegram_notifications` BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Whether to send Telegram bot notifications for this category',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `idx_name` (`name`),
@@ -307,20 +310,19 @@ ON DUPLICATE KEY UPDATE
 
 -- ===========================
 -- Default Categories Seed Data
--- IMPORTANT: Adjust standard_bet values here before first deployment
--- standard_bet is IMMUTABLE once the category is created!
+-- Default standard_bet values for initial deployment
 -- ===========================
-INSERT INTO `categories` (`id`, `name`, `name_el`, `description`, `description_el`, `standard_bet`, `display_order`, `is_active`, `include_in_statistics`) VALUES
-('cat-funbet', 'Funbet', 'Funbet', 'Deeply Researched Low Stake bets. High Risk, High Reward', 'Στοιχήματα Χαμηλού Πονταρίσματος με Βαθιά Έρευνα. Υψηλό Ρίσκο, Υψηλή Απόδοση', 5.00, 1, TRUE, TRUE),
-('cat-hardbets', 'Hard Bets', 'Δύσκολα Bets', 'Risky Bet with Combined Small Odds Selections', 'Ριψοκίνδυνα Στοιχήματα με Συνδυασμένες Χαμηλές Αποδόσεις', 10.00, 2, TRUE, TRUE),
-('cat-live', 'Live', 'Live', 'Live in-play Betting Tips', 'Στοιχηματικές Συμβουλές για Ζωντανά Παιχνίδια', 0.00, 3, TRUE, FALSE),
-('cat-parlay', 'Parlay', 'Παρολί', 'Safe Combined Games with Our Goal being Around 2.00 Odds', 'Ασφαλή Συνδυαστικά Παιχνίδια με Στόχο Αποδόσεις γύρω στο 2.00', 25.00, 4, TRUE, TRUE),
-('cat-ufc', 'UFC', 'UFC', 'UFC Betting Tips', 'Στοιχηματικές Συμβουλές UFC', 0.00, 5, TRUE, FALSE),
-('cat-smallinfo', 'Small Info Bets', 'Μικρές Πληροφορίες', 'Smaller Stake Insider Info Games', 'Παιχνίδια με Μικρό Ποντάρισμα και Εσωτερικές Πληροφορίες', 12.00, 6, TRUE, TRUE),
-('cat-doublebets', 'Double Bets', 'Διπλασιασμός', 'The Best Possible Picks for A Safe 2.00 Odds Flip after our Super Deep Research', 'Οι Καλύτερες Δυνατές Επιλογές για Ασφαλή Απόδοση 2.00 μετά από Πολύ Βαθιά Έρευνά μας', 50.00, 7, TRUE, TRUE),
-('cat-sbt', 'SBT', 'SBT', 'Scanning the Market 24/7 with our Unique Expensive Tools for the Best Possible 2.00 Odds Money Flip on a Live Game. Sports Betting Trading - The Future of Betting', 'Σκανάρουμε την Αγορά 24/7 με τα Μοναδικά Ακριβά Εργαλεία μας για την Καλύτερη Δυνατή Απόδοση 2.00 σε Ζωντανό Παιχνίδι. Sports Betting Trading - Το Μέλλον του Στοιχήματος', 20.00, 8, TRUE, TRUE),
-('cat-ufcvip', 'UFC VIP', 'UFC VIP', 'The Best and Most Well Researched Picks for UFC Fight Night with a Goal of the Safest Possible 2.00 Odds', 'Οι Καλύτερες και πιο Καλά Ερευνημένες Επιλογές για τις Βραδιές UFC με Στόχο την πιο Ασφαλή Απόδοση 2.00', 20.00, 9, TRUE, TRUE),
-('cat-eliteinfo', 'Elite Info Bets', 'Elite Πληροφορίες', 'The most Unique and Rare Insider Info on the Market', 'Οι πιο Μοναδικές και Σπάνιες Εσωτερικές Πληροφορίες στην Αγορά', 60.00, 10, TRUE, TRUE)
+INSERT INTO `categories` (`id`, `name`, `name_el`, `description`, `description_el`, `standard_bet`, `display_order`, `is_active`, `include_in_statistics`, `telegram_notifications`) VALUES
+('cat-funbet', 'Funbet', 'Funbet', 'Deeply Researched Low Stake bets. High Risk, High Reward', 'Στοιχήματα Χαμηλού Πονταρίσματος με Βαθιά Έρευνα. Υψηλό Ρίσκο, Υψηλή Απόδοση', 5.00, 1, TRUE, TRUE, FALSE),
+('cat-hardbets', 'Hard Bets', 'Δύσκολα Bets', 'Risky Bet with Combined Small Odds Selections', 'Ριψοκίνδυνα Στοιχήματα με Συνδυασμένες Χαμηλές Αποδόσεις', 10.00, 2, TRUE, TRUE, FALSE),
+('cat-live', 'Live', 'Live', 'Live in-play Betting Tips', 'Στοιχηματικές Συμβουλές για Ζωντανά Παιχνίδια', 15.00, 3, TRUE, TRUE, TRUE),
+('cat-parlay', 'Parlay', 'Παρολί', 'Safe Combined Games with Our Goal being Around 2.00 Odds', 'Ασφαλή Συνδυαστικά Παιχνίδια με Στόχο Αποδόσεις γύρω στο 2.00', 25.00, 4, TRUE, TRUE, FALSE),
+('cat-ufc', 'UFC', 'UFC', 'UFC Betting Tips', 'Στοιχηματικές Συμβουλές UFC', 0.00, 5, TRUE, FALSE, FALSE),
+('cat-smallinfo', 'Small Info Bets', 'Μικρές Πληροφορίες', 'Smaller Stake Insider Info Games', 'Παιχνίδια με Μικρό Ποντάρισμα και Εσωτερικές Πληροφορίες', 12.00, 6, TRUE, TRUE, TRUE),
+('cat-doublebets', 'Double Bets', 'Διπλασιασμός', 'The Best Possible Picks for A Safe 2.00 Odds Flip after our Super Deep Research', 'Οι Καλύτερες Δυνατές Επιλογές για Ασφαλή Απόδοση 2.00 μετά από Πολύ Βαθιά Έρευνά μας', 50.00, 7, TRUE, TRUE, TRUE),
+('cat-sbt', 'SBT', 'SBT', 'Scanning the Market 24/7 with our Unique Expensive Tools for the Best Possible 2.00 Odds Money Flip on a Live Game. Sports Betting Trading - The Future of Betting', 'Σκανάρουμε την Αγορά 24/7 με τα Μοναδικά Ακριβά Εργαλεία μας για την Καλύτερη Δυνατή Απόδοση 2.00 σε Ζωντανό Παιχνίδι. Sports Betting Trading - Το Μέλλον του Στοιχήματος', 20.00, 8, TRUE, TRUE, TRUE),
+('cat-ufcvip', 'UFC VIP', 'UFC VIP', 'The Best and Most Well Researched Picks for UFC Fight Night with a Goal of the Safest Possible 2.00 Odds', 'Οι Καλύτερες και πιο Καλά Ερευνημένες Επιλογές για τις Βραδιές UFC με Στόχο την πιο Ασφαλή Απόδοση 2.00', 20.00, 9, TRUE, TRUE, TRUE),
+('cat-eliteinfo', 'Elite Info Bets', 'Elite Πληροφορίες', 'The most Unique and Rare Insider Info on the Market', 'Οι πιο Μοναδικές και Σπάνιες Εσωτερικές Πληροφορίες στην Αγορά', 60.00, 10, TRUE, TRUE, TRUE)
 ON DUPLICATE KEY UPDATE `id` = `id`;
 
 -- ===========================

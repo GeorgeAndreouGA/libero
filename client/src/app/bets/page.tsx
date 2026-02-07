@@ -108,33 +108,50 @@ export default function BetsPage() {
     }
   }, [authLoading, isAuthenticated, router]);
 
-  // Fetch data
+  // Fetch categories and stats on initial load
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
-        setLoading(true);
-        setPage(1);
-        const [categoriesData, betsResponse, statsData] = await Promise.all([
+        const [categoriesData, statsData] = await Promise.all([
           api.getAllCategoriesWithAccess(),
-          api.getBets(undefined, undefined, 1, 50),
           api.getDashboardStats(),
         ]);
         setCategories(categoriesData);
-        setBets(betsResponse.data || []);
-        setHasMore((betsResponse.pagination?.page || 1) < (betsResponse.pagination?.totalPages || 1));
         setStats(statsData);
       } catch (err: any) {
-        console.error('Failed to fetch data:', err);
-        setError(err.response?.data?.message || 'Failed to load bets');
-      } finally {
-        setLoading(false);
+        console.error('Failed to fetch initial data:', err);
       }
     };
 
-    fetchData();
+    fetchInitialData();
   }, [isAuthenticated]);
+
+  // Fetch bets whenever filters change (including initial load)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    fetchBets();
+  }, [isAuthenticated, selectedCategory, resultFilter]);
+
+  const fetchBets = async () => {
+    try {
+      setLoading(true);
+      setPage(1);
+      const betsResponse = await api.getBets(
+        selectedCategory || undefined,
+        resultFilter !== 'ALL' ? resultFilter : undefined,
+        1, 50
+      );
+      setBets(betsResponse.data || []);
+      setHasMore((betsResponse.pagination?.page || 1) < (betsResponse.pagination?.totalPages || 1));
+    } catch (err: any) {
+      console.error('Failed to fetch bets:', err);
+      setError(err.response?.data?.message || 'Failed to load bets');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Load more bets
   const loadMoreBets = async () => {
@@ -143,7 +160,11 @@ export default function BetsPage() {
     try {
       setLoadingMore(true);
       const nextPage = page + 1;
-      const betsResponse = await api.getBets(undefined, undefined, nextPage, 50);
+      const betsResponse = await api.getBets(
+        selectedCategory || undefined,
+        resultFilter !== 'ALL' ? resultFilter : undefined,
+        nextPage, 50
+      );
       setBets(prev => [...prev, ...(betsResponse.data || [])]);
       setPage(nextPage);
       setHasMore(nextPage < (betsResponse.pagination?.totalPages || 1));
@@ -164,25 +185,7 @@ export default function BetsPage() {
     setSelectedCategory(category.id === selectedCategory ? null : category.id);
   };
 
-  // Memoize filtered bets to prevent recalculation on every render
-  const filteredBets = useMemo(() => {
-    return bets.filter(bet => {
-      // Category filter
-      if (selectedCategory && bet.categoryId !== selectedCategory) {
-        return false;
-      }
-
-      // Result filter
-      if (resultFilter === 'ALL') return true;
-      if (resultFilter === 'IN_PROGRESS') return bet.result === 'IN_PROGRESS';
-      if (resultFilter === 'FINISHED') return bet.result === 'WIN' || bet.result === 'LOST' || bet.result === 'CASH_OUT';
-      if (resultFilter === 'WIN') return bet.result === 'WIN';
-      if (resultFilter === 'LOST') return bet.result === 'LOST';
-      if (resultFilter === 'CASH_OUT') return bet.result === 'CASH_OUT';
-
-      return true;
-    });
-  }, [bets, selectedCategory, resultFilter]);
+  // Bets are now filtered server-side, no client-side filtering needed
 
   // Memoize category lists
   const { accessibleCategories, inaccessibleCategories } = useMemo(() => ({
@@ -481,19 +484,19 @@ export default function BetsPage() {
       )}
 
       {/* Bets Grid - optimized for mobile */}
-      {filteredBets.length > 0 ? (
+      {bets.length > 0 ? (
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* On mobile, render without AnimatePresence for better performance */}
             {shouldReduceMotion ? (
-              filteredBets.map((bet) => (
+              bets.map((bet) => (
                 <div key={bet.id}>
                   <BetCard {...bet} categoryName={getBetCategoryName(bet, locale)} />
                 </div>
               ))
             ) : (
               <AnimatePresence mode="popLayout">
-                {filteredBets.map((bet, index) => (
+                {bets.map((bet, index) => (
                   <motion.div
                     key={bet.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -510,7 +513,7 @@ export default function BetsPage() {
           </div>
 
           {/* Load More Button */}
-          {hasMore && !selectedCategory && resultFilter === 'ALL' && (
+          {hasMore && (
             <div className="flex justify-center mt-8">
               <Button
                 onClick={loadMoreBets}

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useRef, useMemo, memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useTranslations } from 'next-intl';
 import Navbar from '@/components/layout/Navbar';
 import Panel from '@/components/ui/Panel';
@@ -220,28 +220,44 @@ export default function AdminBetsPage() {
   const tCommon = useTranslations('common');
   const tBets = useTranslations('bets');
 
+  // Initial load - fetch categories
   useEffect(() => {
-    fetchData();
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await api.getCategories(true);
+        setCategories(categoriesData);
+      } catch (err: any) {
+        console.error('Failed to fetch categories:', err);
+      }
+    };
+    fetchCategories();
   }, []);
 
-  const fetchData = async () => {
+  // Fetch bets whenever filters change (including initial load)
+  useEffect(() => {
+    fetchBets();
+  }, [selectedCategory, resultFilter]);
+
+  const fetchBets = async () => {
     try {
       setLoading(true);
       setPage(1);
-      const [categoriesData, betsResponse] = await Promise.all([
-        api.getCategories(true),
-        api.getAdminBets(1, 50),
-      ]);
-      setCategories(categoriesData);
+      const betsResponse = await api.getAdminBets(
+        1, 50,
+        selectedCategory || undefined,
+        resultFilter !== 'ALL' ? resultFilter : undefined
+      );
       setBets(betsResponse.data || []);
       setHasMore((betsResponse.pagination?.page || 1) < (betsResponse.pagination?.totalPages || 1));
     } catch (err: any) {
-      console.error('Failed to fetch data:', err);
+      console.error('Failed to fetch bets:', err);
       setError(err.response?.data?.message || 'Failed to load bets');
     } finally {
       setLoading(false);
     }
   };
+
+  const fetchData = fetchBets;
 
   const loadMoreBets = async () => {
     if (loadingMore || !hasMore) return;
@@ -249,7 +265,11 @@ export default function AdminBetsPage() {
     try {
       setLoadingMore(true);
       const nextPage = page + 1;
-      const betsResponse = await api.getAdminBets(nextPage, 50);
+      const betsResponse = await api.getAdminBets(
+        nextPage, 50,
+        selectedCategory || undefined,
+        resultFilter !== 'ALL' ? resultFilter : undefined
+      );
       setBets(prev => [...prev, ...(betsResponse.data || [])]);
       setPage(nextPage);
       setHasMore(nextPage < (betsResponse.pagination?.totalPages || 1));
@@ -402,23 +422,7 @@ export default function AdminBetsPage() {
     }
   };
 
-  // Memoize filtered bets
-  const filteredBets = useMemo(() => {
-    return bets.filter(bet => {
-      // Category filter - only apply if a category is selected AND we're not in 'ALL' result filter
-      if (selectedCategory && bet.categoryId !== selectedCategory) {
-        return false;
-      }
-      // Result filter
-      if (resultFilter === 'ALL') return true;
-      if (resultFilter === 'IN_PROGRESS') return bet.result === 'IN_PROGRESS';
-      if (resultFilter === 'FINISHED') return bet.result === 'WIN' || bet.result === 'LOST' || bet.result === 'CASH_OUT';
-      if (resultFilter === 'WIN') return bet.result === 'WIN';
-      if (resultFilter === 'LOST') return bet.result === 'LOST';
-      if (resultFilter === 'CASH_OUT') return bet.result === 'CASH_OUT';
-      return true;
-    });
-  }, [bets, selectedCategory, resultFilter]);
+  // Bets are now filtered server-side, no client-side filtering needed
 
   if (loading) {
     return (
@@ -607,7 +611,7 @@ export default function AdminBetsPage() {
         {/* Bets Grid */}
         <div className="relative z-10">
           <Panel>
-            {filteredBets.length === 0 ? (
+            {bets.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-400 mb-4">
                   No bets found for this selection
@@ -634,7 +638,7 @@ export default function AdminBetsPage() {
               <>
                 {/* Card Grid - Optimized for mobile */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                  {filteredBets.map((bet) => (
+                  {bets.map((bet) => (
                     <div key={bet.id}>
                       <AdminBetCard
                         bet={bet}
@@ -650,7 +654,7 @@ export default function AdminBetsPage() {
                 </div>
                 
                 {/* Load More Button */}
-                {hasMore && !selectedCategory && resultFilter === 'ALL' && (
+                {hasMore && (
                   <div className="flex justify-center mt-8">
                     <Button
                       onClick={loadMoreBets}

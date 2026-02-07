@@ -123,6 +123,13 @@
       "language": "Preferred Language",
       "languageHint": "All emails and communications will be sent in this language",
       "languageWarning": "This cannot be changed after signup. Your language determines which Telegram VIP channel you will join when you subscribe.",
+      "acceptTerms": "I accept the",
+      "termsOfService": "Terms of Service",
+      "acceptPrivacy": "I accept the",
+      "privacyPolicy": "Privacy Policy",
+      "acceptCookies": "I accept the",
+      "cookiePolicy": "Cookie Policy",
+      "mustAcceptPolicies": "You must accept the Terms of Service, Privacy Policy, and Cookie Policy",
       "submit": "Create Account",
       "creating": "Creating...",
       "hasAccount": "Already have an account?",
@@ -587,7 +594,7 @@
     "upgrade": {
       "title": "How does upgrading and the categories work?",
       "content": "If someone wants to upgrade from a lower VIP to a higher one, they do not need to pay the full amount, only the difference required to reach the total price of the VIP category they are interested in.",
-      "content2": "The categories funbet, hard bets, parlay, UFC and live belong to the free package and are available to everyone. From these, UFC and live are the only ones that do not count in the statistics.",
+      "content2": "The categories funbet, hard bets, parlay, UFC and live belong to the free package and are available to everyone. From these, UFC is the only one that does not count in the statistics.",
       "content3": "VIP Silver includes games from all countries around the world with our own connections. VIP Gold includes everything in VIP Silver plus the doubles, the UFC VIP where picks are always studied for many hours, and SBT. In the final and best category, VIP Elite, in addition to everything included in the lower VIP packages, we offer games similar to VIP Silver but much stronger and the best on the market. That is why they are offered only in Elite VIP, because the number of people we allow inside is much smaller than in Silver."
     }
   }

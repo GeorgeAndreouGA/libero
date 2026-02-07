@@ -24,6 +24,7 @@ export default function AdminCategoriesPage() {
     displayOrder: 0,
     isActive: true,
     includeInStatistics: true,
+    telegramNotifications: true,
   });
   
   // Pagination state
@@ -74,16 +75,14 @@ export default function AdminCategoriesPage() {
       };
       
       if (editingId) {
-        // Don't send standardBet when updating - it's immutable
-        const { standardBet, ...updateData } = submitData;
-        await api.updateCategory(editingId, updateData);
+        await api.updateCategory(editingId, submitData);
       } else {
         await api.createCategory(submitData);
       }
       
       setShowCreateForm(false);
       setEditingId(null);
-      setFormData({ name: '', nameEl: '', description: '', descriptionEl: '', standardBet: '', displayOrder: 0, isActive: true, includeInStatistics: true });
+      setFormData({ name: '', nameEl: '', description: '', descriptionEl: '', standardBet: '', displayOrder: 0, isActive: true, includeInStatistics: true, telegramNotifications: true });
       await fetchCategories();
     } catch (err: any) {
       alert(err.response?.data?.message || 'Failed to save category');
@@ -101,6 +100,7 @@ export default function AdminCategoriesPage() {
       displayOrder: category.displayOrder,
       isActive: category.isActive,
       includeInStatistics: category.includeInStatistics !== false,
+      telegramNotifications: category.telegramNotifications !== false,
     });
     setShowCreateForm(true);
   };
@@ -119,7 +119,7 @@ export default function AdminCategoriesPage() {
   const handleCancel = () => {
     setShowCreateForm(false);
     setEditingId(null);
-    setFormData({ name: '', nameEl: '', description: '', descriptionEl: '', standardBet: '', displayOrder: 0, isActive: true, includeInStatistics: true });
+    setFormData({ name: '', nameEl: '', description: '', descriptionEl: '', standardBet: '', displayOrder: 0, isActive: true, includeInStatistics: true, telegramNotifications: true });
   };
 
   if (loading) {
@@ -247,7 +247,7 @@ export default function AdminCategoriesPage() {
 
                 <div>
                   <label className="block text-sm font-bold text-gray-300 mb-2">
-                    Standard Bet (€) * {editingId && <span className="text-yellow-400 text-xs">(Cannot be changed after creation)</span>}
+                    Standard Bet (€) *
                   </label>
                   <input
                     type="number"
@@ -255,14 +255,10 @@ export default function AdminCategoriesPage() {
                     min="0"
                     value={formData.standardBet}
                     onChange={(e) => setFormData({ ...formData, standardBet: e.target.value })}
-                    required={!editingId}
-                    disabled={!!editingId}
-                    className={`w-full px-4 py-2 bg-dark-200 border border-gray-700 rounded-lg text-white focus:border-neon-cyan focus:outline-none ${editingId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    required
+                    className="w-full px-4 py-2 bg-dark-200 border border-gray-700 rounded-lg text-white focus:border-neon-cyan focus:outline-none"
                     placeholder="e.g., 10.00"
                   />
-                  {!editingId && (
-                    <p className="text-xs text-gray-500 mt-1">This value cannot be changed once set.</p>
-                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -303,6 +299,19 @@ export default function AdminCategoriesPage() {
                   />
                   <label htmlFor="includeInStatistics" className="text-sm font-bold text-gray-300">
                     Include in Public Statistics
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="telegramNotifications"
+                    checked={formData.telegramNotifications}
+                    onChange={(e) => setFormData({ ...formData, telegramNotifications: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-700 bg-dark-200 text-neon-cyan focus:ring-neon-cyan"
+                  />
+                  <label htmlFor="telegramNotifications" className="text-sm font-bold text-gray-300">
+                    Send Telegram Bot Notifications
                   </label>
                 </div>
 

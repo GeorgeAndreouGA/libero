@@ -40,7 +40,7 @@ export class StatisticsService {
   constructor(private readonly db: DatabaseService) {}
 
   /**
-   * Get statistics for all categories that are included in statistics (exclude UFC and LIVE)
+   * Get statistics for all categories that are included in statistics (exclude UFC)
    * @param month Optional month filter (1-12)
    * @param year Optional year filter
    */

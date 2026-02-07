@@ -24,6 +24,9 @@ export default function SignupPage() {
     confirmPassword: '',
     dateOfBirth: '',
     language: 'en',
+    acceptTerms: false,
+    acceptPrivacy: false,
+    acceptCookies: false,
   });
   const [captchaToken, setCaptchaToken] = useState('');
   const [error, setError] = useState('');
@@ -101,6 +104,11 @@ export default function SignupPage() {
       return;
     }
 
+    if (!formData.acceptTerms || !formData.acceptPrivacy || !formData.acceptCookies) {
+      setError(t('mustAcceptPolicies') || 'You must accept the Terms of Service, Privacy Policy, and Cookie Policy');
+      return;
+    }
+
     if (!captchaToken) {
       setError('Please complete the security check');
       return;
@@ -116,6 +124,9 @@ export default function SignupPage() {
         password: formData.password,
         dateOfBirth: formData.dateOfBirth,
         language: formData.language,
+        acceptTerms: formData.acceptTerms,
+        acceptPrivacy: formData.acceptPrivacy,
+        acceptCookies: formData.acceptCookies,
         captchaToken,
       });
       
@@ -443,6 +454,54 @@ export default function SignupPage() {
                 </div>
               </div>
 
+              {/* Terms, Privacy & Cookie Consent */}
+              <div className="space-y-3">
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={formData.acceptTerms}
+                    onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
+                    className="mt-1 w-4 h-4 rounded border-gray-600 bg-cyber-navy/50 text-neon-cyan focus:ring-neon-cyan focus:ring-offset-0 cursor-pointer"
+                  />
+                  <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                    {t('acceptTerms')}{' '}
+                    <Link href="/legal/terms" target="_blank" className="text-neon-cyan hover:text-neon-blue transition-colors underline">
+                      {t('termsOfService')}
+                    </Link>
+                  </span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={formData.acceptPrivacy}
+                    onChange={(e) => setFormData({ ...formData, acceptPrivacy: e.target.checked })}
+                    className="mt-1 w-4 h-4 rounded border-gray-600 bg-cyber-navy/50 text-neon-cyan focus:ring-neon-cyan focus:ring-offset-0 cursor-pointer"
+                  />
+                  <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                    {t('acceptPrivacy')}{' '}
+                    <Link href="/legal/privacy" target="_blank" className="text-neon-cyan hover:text-neon-blue transition-colors underline">
+                      {t('privacyPolicy')}
+                    </Link>
+                  </span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={formData.acceptCookies}
+                    onChange={(e) => setFormData({ ...formData, acceptCookies: e.target.checked })}
+                    className="mt-1 w-4 h-4 rounded border-gray-600 bg-cyber-navy/50 text-neon-cyan focus:ring-neon-cyan focus:ring-offset-0 cursor-pointer"
+                  />
+                  <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                    {t('acceptCookies')}{' '}
+                    <Link href="/legal/cookies" target="_blank" className="text-neon-cyan hover:text-neon-blue transition-colors underline">
+                      {t('cookiePolicy')}
+                    </Link>
+                  </span>
+                </label>
+              </div>
+
               <Captcha
                 ref={captchaRef}
                 onVerify={handleCaptchaVerify}
@@ -450,7 +509,7 @@ export default function SignupPage() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !formData.acceptTerms || !formData.acceptPrivacy || !formData.acceptCookies}
                 className="relative w-full font-orbitron font-bold uppercase tracking-wider transition-all duration-300 rounded-xl light-sweep overflow-hidden bg-gradient-to-r from-neon-blue to-neon-cyan text-cyber-dark hover:scale-105 glow-blue border-2 border-neon-blue px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">

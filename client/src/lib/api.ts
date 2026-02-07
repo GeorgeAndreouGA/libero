@@ -104,7 +104,7 @@ class ApiClient {
   }
 
   // Auth endpoints
-  async signup(data: { email: string; password: string; username: string; fullName: string; dateOfBirth: string; language: string; captchaToken: string }) {
+  async signup(data: { email: string; password: string; username: string; fullName: string; dateOfBirth: string; language: string; acceptTerms: boolean; acceptPrivacy: boolean; acceptCookies: boolean; captchaToken: string }) {
     const response = await this.client.post('/auth/signup', data);
     return response.data;
   }
@@ -375,9 +375,9 @@ class ApiClient {
     return response.data;
   }
 
-  async getAdminBets(page: number = 1, limit: number = 50) {
+  async getAdminBets(page: number = 1, limit: number = 50, categoryId?: string, result?: string) {
     const response = await this.client.get('/admin/bets', {
-      params: { page, limit },
+      params: { page, limit, categoryId, result },
     });
     return response.data;
   }

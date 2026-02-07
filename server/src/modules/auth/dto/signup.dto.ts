@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength, Matches, MaxLength, IsNotEmpty, IsIn, IsDateString } from 'class-validator';
+import { IsEmail, IsString, MinLength, Matches, MaxLength, IsNotEmpty, IsIn, IsDateString, IsBoolean, Equals } from 'class-validator';
 
 export class SignupDto {
   @ApiProperty({
@@ -67,6 +67,30 @@ export class SignupDto {
     message: 'Language must be either "en" (English) or "el" (Greek)',
   })
   language: string;
+
+  @ApiProperty({
+    example: true,
+    description: 'User must accept the Terms of Service',
+  })
+  @IsBoolean({ message: 'You must accept the Terms of Service' })
+  @Equals(true, { message: 'You must accept the Terms of Service' })
+  acceptTerms: boolean;
+
+  @ApiProperty({
+    example: true,
+    description: 'User must accept the Privacy Policy',
+  })
+  @IsBoolean({ message: 'You must accept the Privacy Policy' })
+  @Equals(true, { message: 'You must accept the Privacy Policy' })
+  acceptPrivacy: boolean;
+
+  @ApiProperty({
+    example: true,
+    description: 'User must accept the Cookie Policy',
+  })
+  @IsBoolean({ message: 'You must accept the Cookie Policy' })
+  @Equals(true, { message: 'You must accept the Cookie Policy' })
+  acceptCookies: boolean;
 
   @ApiProperty({
     example: 'eyJpZCI6IjE3MzU2...',

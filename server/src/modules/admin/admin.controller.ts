@@ -34,11 +34,13 @@ export class AdminController {
   @ApiOperation({ summary: 'Get all bets for admin management' })
   async getBets(
     @Query('page') page?: string,
-    @Query('limit') limit?: string
+    @Query('limit') limit?: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('result') result?: string
   ) {
     const pageNum = parseInt(page || '1', 10) || 1;
     const limitNum = parseInt(limit || '50', 10) || 50;
-    return this.adminService.getBets(pageNum, limitNum);
+    return this.adminService.getBets(pageNum, limitNum, categoryId, result);
   }
 
   @Post('bets')

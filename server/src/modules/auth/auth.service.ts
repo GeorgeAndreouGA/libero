@@ -88,10 +88,15 @@ export class AuthService {
    * Sign up a new user
    */
   async signup(signupDto: SignupDto) {
-    const { email, username, password, fullName, dateOfBirth, language, captchaToken } = signupDto;
+    const { email, username, password, fullName, dateOfBirth, language, acceptTerms, acceptPrivacy, acceptCookies, captchaToken } = signupDto;
 
     // Verify CAPTCHA first
     await this.captchaService.verifyToken(captchaToken);
+
+    // Validate consent - all must be accepted
+    if (!acceptTerms || !acceptPrivacy || !acceptCookies) {
+      throw new BadRequestException('You must accept the Terms of Service, Privacy Policy, and Cookie Policy');
+    }
 
     // Validate age - must be 18 or older
     const birthDate = new Date(dateOfBirth);
@@ -147,8 +152,9 @@ export class AuthService {
       `INSERT INTO users (
         id, email, username, password_hash, full_name, role, status, 
         email_verified, email_verification_token, email_verification_expires, 
-        date_of_birth, age_verified, preferred_language, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 10 MINUTE), ?, ?, ?, NOW())`,
+        date_of_birth, age_verified, cookie_consent, terms_accepted, privacy_accepted,
+        preferred_language, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 10 MINUTE), ?, ?, ?, ?, ?, ?, NOW())`,
       [
         userId,
         email,
@@ -161,6 +167,9 @@ export class AuthService {
         email_verification_token,
         dateOfBirth,
         true, // Age verified during signup (validated above)
+        true, // Cookie consent accepted during signup
+        true, // Terms of Service accepted during signup
+        true, // Privacy Policy accepted during signup
         preferredLanguage,
       ],
     );
