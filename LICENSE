@@ -1,0 +1,112 @@
+# Source Available License with Contribution Rights
+
+**Version 1.0 - December 2025**
+
+Copyright (c) 2025 Libero. All Rights Reserved.
+
+## Terms and Conditions
+
+### 1. Definitions
+
+- "Software" refers to the Libero betting tips platform, including all source code, documentation, assets, and associated materials in this repository.
+- "Contributor" means any individual or entity that submits modifications, enhancements, or additions to the Software.
+- "Owner" refers to the copyright holder(s) of this Software.
+- "Contribution" means any modification, enhancement, bug fix, or addition submitted by a Contributor.
+
+### 2. Grant of Rights
+
+Subject to the terms of this license, you are granted the following limited rights:
+
+#### 2.1 Right to View and Study
+You may view, read, and study the source code for educational and reference purposes only.
+
+#### 2.2 Right to Contribute
+You may fork, modify, and submit contributions (pull requests) to improve the Software, subject to the following conditions:
+- All contributions must be submitted through the official repository channels
+- All contributions become the property of the Owner upon acceptance
+- Contributors grant the Owner a perpetual, worldwide, royalty-free license to use, modify, and distribute their contributions
+- Contributors retain the right to be credited for their contributions
+
+### 3. Restrictions
+
+You are expressly prohibited from:
+
+#### 3.1 Commercial Use
+- Using the Software or any portion thereof for commercial purposes
+- Selling, licensing, or sublicensing the Software
+- Offering the Software as a paid service or subscription
+- Using the Software to generate revenue directly or indirectly
+- Incorporating the Software into any commercial product or service
+
+#### 3.2 Distribution
+- Distributing, publishing, or making the Software publicly available
+- Creating derivative works for distribution (except contributions to this repository)
+- Hosting or deploying the Software for public access (except by the Owner)
+
+#### 3.3 Competition
+- Using the Software to create a competing product or service
+- Using the knowledge gained from studying the Software to build similar commercial applications
+
+### 4. Contributions
+
+#### 4.1 Contribution Guidelines
+All contributions must:
+- Be original work or properly attributed
+- Not violate any third-party intellectual property rights
+- Include appropriate tests where applicable
+- Follow the project's coding standards and guidelines
+
+#### 4.2 Contributor Agreement
+By submitting a contribution, you:
+- Confirm you have the right to submit the contribution
+- Grant the Owner full rights to the contribution as described in Section 2.2
+- Agree to these license terms
+- Waive any claims to compensation for the contribution
+
+### 5. Intellectual Property
+
+#### 5.1 Ownership
+The Owner retains all right, title, and interest in the Software, including all intellectual property rights. This license does not transfer any ownership rights.
+
+#### 5.2 Trademarks
+This license does not grant permission to use the trade names, trademarks, service marks, or product names of the Owner.
+
+### 6. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+### 7. Limitation of Liability
+
+IN NO EVENT SHALL THE OWNER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### 8. Termination
+
+This license is effective until terminated. Your rights under this license will terminate automatically without notice if you fail to comply with any of its terms. Upon termination, you must cease all use of the Software and destroy all copies in your possession.
+
+### 9. Governing Law
+
+This license shall be governed by and construed in accordance with the laws of the European Union and the applicable member state of residence of the Owner.
+
+### 10. Severability
+
+If any provision of this license is held to be unenforceable, such provision shall be reformed only to the extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.
+
+---
+
+## Summary (Not Part of License)
+
+**What you CAN do:**
+- ✅ View and study the source code
+- ✅ Submit bug fixes and improvements via pull requests
+- ✅ Learn from the codebase for educational purposes
+
+**What you CANNOT do:**
+- ❌ Use this code for commercial purposes
+- ❌ Deploy this as your own service
+- ❌ Sell or distribute this software
+- ❌ Create competing products using this code
+- ❌ Remove or alter copyright notices
+
+---
+
+For licensing inquiries or permission requests, contact the project owner.
