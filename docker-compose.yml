@@ -39,8 +39,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       TZ: ${TZ}
-    ports:
-      - "3307:3306"
+
     networks:
       - libero-prod
     volumes:
@@ -67,8 +66,6 @@ services:
     dns:
       - 8.8.8.8
       - 8.8.4.4
-    ports:
-      - "127.0.0.1:3005:3000"
     environment:
       NODE_ENV: ${NODE_ENV}
       SWAGGER_ENABLED: ${SWAGGER_ENABLED:-false}
@@ -191,8 +188,6 @@ services:
       NODE_ENV: production
       TZ: ${TZ}
       
-    ports:
-      - "127.0.0.1:3006:3001"
     networks:
       - libero-prod
     depends_on:
